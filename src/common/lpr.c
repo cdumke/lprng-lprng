@@ -212,7 +212,8 @@ int main(int argc, char *argv[], char *envp[])
 		/* Print_job( output_device, status_device, job, timeout, poll_for_status ) */
 		Print_job( tempfd, -1, &prjob, 0, 0, User_filter_JOB );
 		Set_str_value( &PC_entry_line_list, LP, old_lp_value );
-		if( old_lp_value ) free( old_lp_value ); old_lp_value = 0;
+		free( old_lp_value );
+		old_lp_value = 0;
 
 		close(tempfd);
 		tempfd = Checkread( tempfile, &statb );
@@ -277,8 +278,11 @@ int main(int argc, char *argv[], char *envp[])
 			Get_status_from_OF(&prjob,"LP",pid,
 				status_fd, buffer, sizeof(buffer)-1, Send_job_rw_timeout_DYN, 0, 0, 0 );
 		}
-		if( fd > 0 ) close( fd ); fd = -1;
-		if( status_fd > 0 ) close( status_fd ); status_fd = -1;
+		if( fd > 0 ) close( fd );
+		fd = -1;
+		if( status_fd > 0 ) close( status_fd );
+		status_fd = -1;
+
 		if( pid > 0 ){
 			setstatus(&prjob, "waiting for printer filter to exit");
 			Errorcode = Wait_for_pid( pid, "LP", 0, Send_job_rw_timeout_DYN );
@@ -302,7 +306,8 @@ int main(int argc, char *argv[], char *envp[])
 				s = Join_line_list(&Status_lines,"\n ");
 				if( (t = safestrrchr(s,' ')) ) *t = 0;
 				Write_fd_str(2,s);
-				if(s) free(s); s = 0;
+				free(s);
+				s = 0;
 				Init_line_list( &Status_lines );
 				++attempt;
 				n = Connect_interval_DYN + Connect_grace_DYN;
@@ -323,7 +328,8 @@ int main(int argc, char *argv[], char *envp[])
 	}
 
   exit:
-	if( send_to_pr ) free(send_to_pr); send_to_pr = 0;
+	free(send_to_pr);
+	send_to_pr = 0;
 	if( Errorcode ){
 		Errorcode = 1;
 		if(DEBUGL1)Dump_job("lpr - after error",&prjob);
@@ -338,7 +344,8 @@ int main(int argc, char *argv[], char *envp[])
 		s = Join_line_list(&Status_lines,"\n ");
 		if( (t = safestrrchr(s,' ')) ) *t = 0;
 		Write_fd_str(2,s);
-		if(s) free(s); s = 0;
+		free(s);
+		s = 0;
 		cleanup(0);
 	}
 
@@ -833,7 +840,8 @@ static int Make_job( struct job *job )
 				name = safeextend3(name,name?",":"",s,__FILE__,__LINE__);
 			}
 			Set_str_value(&job->info,JOBNAME, name );
-			if( name ) free(name); name = 0;
+			free(name);
+			name = 0;
 		}
 	} else {
 		Set_str_value(&job->info,JOBNAME,Jobname_JOB );
@@ -954,7 +962,8 @@ static int Make_job( struct job *job )
 	if( isdigit(cval(originate_hostname)) ){
 		s = safestrdup2("ADDR",originate_hostname,__FILE__,__LINE__);
 		Set_str_value(&job->info,FILE_HOSTNAME,s);
-		if( s ) free(s); s = 0;
+		free(s);
+		s = 0;
 	} else {
 		Set_str_value(&job->info,FILE_HOSTNAME,originate_hostname);
 	}
