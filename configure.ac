@@ -1,7 +1,7 @@
 AC_INIT(LPRng,3.9.0,lprng-devel@lists.sf.net)
 AC_CONFIG_SRCDIR(src/common/lpr.c)
 AM_CONFIG_HEADER(config.h)
-AM_INIT_AUTOMAKE([foreign])
+AM_INIT_AUTOMAKE([foreign subdir-objects])
 
 AM_MAINTAINER_MODE
 
