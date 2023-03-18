@@ -32,7 +32,6 @@ static int Remove;
 static char *User_specified_printer;
 static time_t Current_time;
 static int Check_path_list( char *plist, int allow_missing );
-int Mail_fd;
 
 
 /* pathnames of the spool directory (sd) and control directory (cd) */
