@@ -196,7 +196,7 @@ int main( int argc, char *argv[], char *envp[] )
 			}
 			*p = '/';
 		}
-		if( path ) free( path ); path = 0;
+		free( path ); path = 0;
 		Spool_file_perms_DYN = oldfile;
 	}
 
@@ -623,11 +623,12 @@ void Make_write_file( char *file, char *printer )
 	if( Check_file( s, Fix, 0, 0 ) ){
 		WARNMSG("  ** ownership or permissions problem with '%s'", s );
 	}
-	if( s ) free(s); s = 0;
-	if( fd >= 0 ) close(fd); fd = -1;
+	free(s); s = 0;
+	if( fd >= 0 ) close(fd);
+	fd = -1;
 }
 
-static void usage(void)
+ __attribute__((noreturn)) static void usage(void) 
 {
 	FPRINTF( STDERR,
 "checkpc [-aflprsV] [-A age] [-D debuglevel] [-P printer] [-t size]\n"
@@ -661,9 +662,9 @@ int getage( char *age )
 			default: t = 0; break;
 
 			case 0:
-			case 'd': case 'D': t *= 24;
-			case 'h': case 'H': t *= 60;
-			case 'm': case 'M': t *= 60;
+			case 'd': case 'D': t *= 24;  __attribute__((fallthrough));
+			case 'h': case 'H': t *= 60; __attribute__((fallthrough));
+			case 'm': case 'M': t *= 60; __attribute__((fallthrough));
 			case 's': case 'S': break;
 		}
 	}
@@ -928,7 +929,7 @@ int Check_spool_dir( char *path )
 			}
 		}
 	}
-	if(pathname) free(pathname); pathname = 0;
+	free(pathname); pathname = 0;
 	Free_line_list(&parts);
 	/* now we do chown if necessary */
 	if( Fix ){
