@@ -394,10 +394,9 @@ static int md5_send( int *sock, int transfer_timeout, char *tempfile,
 			goto error;
 		}
 	}
-	close( tempfd ); tempfd = -1;
-
+	
  error:
-	if( tempfd >= 0 ) close(tempfd); tempfd = -1;
+	close(tempfd); 
 	return(status);
 }
 
