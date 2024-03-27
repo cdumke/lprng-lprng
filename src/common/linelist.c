@@ -2107,9 +2107,9 @@ static void Setup_env_for_process( struct line_list *env, struct job *job )
 		u = safestrdup4(t,(s?"\n :":0),s,"\n",__FILE__,__LINE__);
 		Expand_percent( &u );
 		Set_str_value(env, "PRINTCAP_ENTRY",u);
-		if(s) free(s); s = 0;
-		if(t) free(t); t = 0;
-		if(u) free(u); u = 0;
+		free(s); s = NULL;
+		free(t); t = NULL;
+		free(u); u = NULL;
 	}
 	if( Ppd_file_DYN ){
 		Set_str_value(env, "PPD", Ppd_file_DYN);
