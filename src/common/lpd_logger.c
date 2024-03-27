@@ -92,8 +92,8 @@ static int Dump_queue_status(int outfd)
 		sp = Escape(s, 1);
 		if( Write_fd_str( outfd, sp ) < 0 ){ return(1); }
 
-		if( s ) free(s); s = 0;
-		if( sp ) free(sp); sp = 0;
+		free(s); s = NULL;
+		free(sp); sp = NULL;
 
 		if( Write_fd_str( outfd, "VALUE=" ) < 0 ){ return(1); }
 
@@ -103,7 +103,7 @@ static int Dump_queue_status(int outfd)
 				buffer[count] = 0;
 				s = Escape(buffer,3);
 				if( Write_fd_str( outfd, s ) < 0 ){ return(1); }
-				if(s) free(s); s = 0;
+				free(s); s = NULL;
 			}
 			close(fd);
 		}
@@ -115,7 +115,7 @@ static int Dump_queue_status(int outfd)
 				buffer[count] = 0;
 				s = Escape(buffer,3);
 				if( Write_fd_str( outfd, s ) < 0 ){ return(1); }
-				if(s) free(s); s = 0;
+				free(s); s = NULL;
 			}
 			close(fd);
 		}
@@ -130,8 +130,8 @@ static int Dump_queue_status(int outfd)
 			s = Join_line_list(&job.info,"\n");
 			sp = Escape(s, 3);
 			if( Write_fd_str( outfd, sp ) < 0 ){ return(1); }
-			if( s ) free(s); s = 0;
-			if( sp ) free(sp); sp = 0;
+			free(s); s = NULL;
+			free(sp); sp = NULL;
 			if( Write_fd_str( outfd, esc_lf_1 ) < 0 ){ return(1); }
 		}
 		if( Write_fd_str( outfd, "\n" ) < 0 ){ return(1); }
@@ -143,8 +143,8 @@ static int Dump_queue_status(int outfd)
 	Free_line_list( &Sort_order );
 	Free_line_list(&info);
 	Free_job(&job);
-	if( s ) free(s); s = 0;
-	if( sp ) free(sp); sp = 0;
+	free(s); s = NULL;
+	free(sp); sp = NULL;
 	return(0);
 }
 
