@@ -2695,8 +2695,11 @@ int Filter_file( int timeout, int input_fd, int output_fd, const char *error_hea
 	files.count = 0;
 	Free_line_list(&files);
 
-	if( input_fd < 0 ) close(innull_fd); innull_fd = -1;
-	if( output_fd < 0 ) close(outnull_fd); outnull_fd = -1;
+	if( input_fd < 0 ) close(innull_fd);
+	innull_fd = -1;
+	if( output_fd < 0 ) close(outnull_fd);
+	outnull_fd = -1;
+
 	if( (close(of_error[1]) == -1 ) ){
 		Errorcode = JFAIL;
 		logerr_die(LOG_INFO, "Filter_file: X8 close(%d) failed",
