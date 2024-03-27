@@ -256,7 +256,7 @@ static int Test_receive( int *sock, int transfer_timeout,
 	DEBUGF(DRECV1)("Test_receive: reply done" );
 
  error:
-	if( tempfd>=0) close(tempfd); tempfd = -1;
+	close(tempfd);
 	return(status);
 }
 
