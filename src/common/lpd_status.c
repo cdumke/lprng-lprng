@@ -759,7 +759,7 @@ void Get_queue_status( struct line_list *tokens, int *sock,
 			Add_line_list(&outbuf,msg,0,0,0);
 			s = Make_job_ticket_image(&job);
 			Add_line_list(&outbuf,s,0,0,0);
-			if( s ) free(s); s = 0;
+			free(s); s = NULL;
 		} else if( displayformat == REQ_DSHORT ){
 			if( printable ){
 				++matches;
@@ -811,7 +811,7 @@ void Get_queue_status( struct line_list *tokens, int *sock,
 			} else {
 				plp_snprintf( header+len, sizeof(header)-len, " '%s'", s );
 			}
-			if(s) free(s); s = 0;
+			free(s); s = NULL;
 		}
 	}
 
@@ -972,7 +972,7 @@ void Get_queue_status( struct line_list *tokens, int *sock,
 
 	path = Make_pathname( Spool_dir_DYN, Queue_unspooler_file_DYN );
 	unspooler_pid = Read_pid_from_file( path );
-	if(path) free(path); path=0;
+	free(path); path=NULL;
 	DEBUGF(DLPQ3)("Get_queue_status: checking unspooler pid %d", unspooler_pid );
 	if( unspooler_pid > 0 && kill( unspooler_pid, 0 ) ){
 		DEBUGF(DLPQ3)("Get_queue_status: unspooler %d not active", unspooler_pid );
@@ -1118,9 +1118,9 @@ void Get_queue_status( struct line_list *tokens, int *sock,
 		s = Join_line_list(&cache_info,",");
 
 		/* now set up the new values */
-		if( cache.list[cache_index] ) free( cache.list[cache_index]); cache.list[cache_index] = 0;
+		free( cache.list[cache_index]);
 		cache.list[cache_index] = safestrdup3(hash_key,"=",s,__FILE__,__LINE__);
-		if( s ) free(s); s = 0;
+		free(s); s = NULL;
 
 		DEBUGFC(DLPQ3)Dump_line_list("Get_queue_status- new cache", &cache );
 		if( rename( tempfile, buffer ) ){
@@ -1144,7 +1144,7 @@ void Get_queue_status( struct line_list *tokens, int *sock,
 			Errorcode = JABORT;
 			logerr_die(LOG_INFO, "Get_queue_status: write failed file '%s'", Lpq_status_file_DYN);
 		}
-		if(s) free(s); s = 0;
+		free(s); s = NULL;
 		close(lockfd);
 		
 #if 0
@@ -1268,7 +1268,7 @@ static void Print_status_info( int *sock, char *file,
 		image = Get_file_image(file, i);
 		Split(&l,image,Line_ends,0,0,0,0,0,0);
 		if( l.count < status_lines ){
-			if( image ) free( image ); image = 0;
+			free( image );
 			image = Get_file_image(file, 0);
 			Split(&l,image,Line_ends,0,0,0,0,0,0);
 		}
@@ -1302,7 +1302,7 @@ static void Print_status_info( int *sock, char *file,
 		if( Write_fd_str(*sock,"\n") < 0 ) cleanup(0);
 	}
 	Free_line_list(&l);
-	if( image) free(image); image = 0;
+	free(image); image = NULL;
 }
 
 void Print_different_last_status_lines( int *sock, int fd,
