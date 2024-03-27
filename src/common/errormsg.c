@@ -880,14 +880,14 @@ const char *Server_status( int d )
 		Set_str_value(&l,HOST,FQDNHost_FQDN);
 		s = Escape(msg_b,1);
 		Set_str_value(&l,VALUE,s);
-		if(s) free(s); s = 0;
+		free(s); 
 		t = Join_line_list(&l,"\n");
 		s = Escape(t,1); 
-		if(t) free(t); t = 0;
+		free(t); 
 		t = safestrdup4(header,"=",s,"\n",__FILE__,__LINE__);
 		Write_fd_str( Logger_fd, t );
-		if( s ) free(s); s = 0;
-		if( t ) free(t); t = 0;
+		free(s); s = NULL;
+		free(t); t = NULL;
 	}
 	Free_line_list(&l);
 }
