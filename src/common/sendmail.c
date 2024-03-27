@@ -116,13 +116,13 @@ void Sendmail_to_user( int retval, struct job *job )
 	if( (s = Get_file_image( Queue_status_file_DYN, Max_status_size_DYN )) ){
 		if( Write_fd_str( tempfd, "\nStatus:\n\n" ) < 0 ||
 			Write_fd_str( tempfd, s ) < 0 ) goto wr_error;
-		if(s) free(s); s = 0;
+		free(s); s = NULL;
 	}
 
 	if( (s = Get_file_image( Status_file_DYN, Max_status_size_DYN )) ){
 		if( Write_fd_str( tempfd, "\nFilter Status:\n\n" ) < 0 ||
 			Write_fd_str( tempfd, s ) < 0 ) goto wr_error;
-		if(s) free(s); s = 0;
+		free(s); s = NULL;
 	}
 	if( lseek( tempfd, 0, SEEK_SET ) == -1 ){
 		Errorcode = JABORT;
