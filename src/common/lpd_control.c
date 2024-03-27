@@ -627,7 +627,8 @@ static int Do_job_ticket_file( int action, int *sock,
 		/*
 		 * check to see if this entry matches any of the patterns
 		 */
-		if( fd > 0 ) close(fd); fd = -1;
+		if( fd > 0 ) close(fd);
+		fd = -1;
 		Free_job(&job);
 		Get_job_ticket_file( &fd, &job, Sort_order.list[i] );
 		DEBUGFC(DCTRL2)Dump_job("Do_job_ticket_file - getting info",&job);
@@ -754,7 +755,8 @@ static int Do_job_ticket_file( int action, int *sock,
 			goto next_dest;
 		}
 	}
-	if( fd > 0 ) close(fd); fd = -1;
+	if( fd > 0 ) close(fd);
+	fd = -1;
 	Free_job(&job);
 	Free_line_list(&Sort_order);
 	Free_line_list(&l);
@@ -1087,9 +1089,9 @@ static int Do_control_printcap( int *sock )
 	} else {
 		if( Write_fd_str( *sock, "\n" ) < 0 ) cleanup(0);
 	}
-	if( s ) free(s); s = 0;
-	if( t ) free(t); t = 0;
-	if( printcap ) free(printcap); printcap = 0;
+	free(s);
+	free(t);
+	free(printcap); 
 	return(0);
 }
 

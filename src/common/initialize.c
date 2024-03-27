@@ -207,7 +207,7 @@ void Setup_configuration()
 	} else {
 		s = Get_user_information();
 		Set_DYN( &Logname_DYN, s );
-		if(s) free(s); s = 0;
+		free(s); s = NULL;
 	}
 	DEBUG1( "Is_server %ld, DaemonUID %ld, DaemonGID %ld, UID %ld, EUID %ld, GID %ld, EGID %ld",
 		(long)Is_server, (long)DaemonUID, (long)DaemonGID,
@@ -250,7 +250,7 @@ void Setup_configuration()
 		Build_printcap_info( &PC_names_line_list, &order,
 			&PC_info_line_list, &raw, &Host_IP );
 		Free_line_list( &raw );
-		if( s ) free(s); s = 0;
+		free(s); s = NULL;
 		/* now we append the names from the order list */
 		if( order.count > 0 ){
 			int i;

@@ -313,7 +313,8 @@ static int Do_secure_work( char *jobsize, int from_server,
 		}
 	}
 
-	if( fd >= 0 ) close(fd); fd = -1;
+	if( fd >= 0 ) close(fd);
+	fd = -1;
 
 	DEBUGFC(DRECV1)Dump_line_list("Do_secure_work - header", header_info );
 
@@ -355,7 +356,9 @@ static int Do_secure_work( char *jobsize, int from_server,
 
  error:
 
-	if( fd >= 0 ) close(fd); fd = -1;
+	if( fd >= 0 ) close(fd);
+	fd = -1;
+
 	DEBUGF(DRECV1)("Do_secure_work: status %d, tempfile '%s', error '%s'",
 		status, tempfile, error );
 	if( error[0] ){

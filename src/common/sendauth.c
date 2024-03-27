@@ -211,7 +211,7 @@ int Send_auth_transfer( int *sock, int transfer_timeout,
 	/* we are going to put the returned error status in the temp file
 	 * as the device to read from
 	 */
-	if( secure ) free(secure); secure = 0;
+	free(secure); secure = NULL;
 	if( error[0] ){
 		if( job ){
 			setstatus(logjob, "Send_auth_transfer: %s", error );
@@ -235,7 +235,8 @@ int Send_auth_transfer( int *sock, int transfer_timeout,
 			Errorcode = JFAIL;
 			logerr_die(LOG_INFO, "Send_auth_transfer: dup2(%d,%d)", fd, *sock );
 		}
-		if( fd != *sock ) close(fd); fd = -1;
+		if( fd != *sock ) close(fd);
+		fd = -1;
 	}
 	Free_line_list(info);
 	DEBUG3("Send_auth_transfer: exit status %d, error '%s'",
@@ -378,5 +379,5 @@ void Put_in_auth( int tempfd, const char *key, char *value )
 		Errorcode = JFAIL;
 		logerr_die(LOG_INFO, "Put_in_auth: cannot write to file" );
 	}
-	if( v ) free(v); v = 0;
+	free(v); 
 }

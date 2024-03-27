@@ -781,7 +781,7 @@ int Get_lpd_pid(void)
 
 	path = safestrdup3( Lockfile_DYN,".", Lpd_port_DYN, __FILE__, __LINE__ );
 	pid = Read_pid_from_file( path );
-	if( path ) free(path); path = 0;
+	free(path); 
 	return(pid);
 }
 

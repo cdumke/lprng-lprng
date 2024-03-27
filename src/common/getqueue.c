@@ -233,7 +233,7 @@ int Get_fd_image_and_split( int fd,
 	if( return_image ){
 		*return_image = s;
 	} else {
-		if( s ) free(s); s = 0;
+		free(s); s = NULL;
 	}
 	return(0);
 }
@@ -259,7 +259,7 @@ int Get_file_image_and_split( const char *file,
 	if( return_image ){
 		*return_image = s;
 	} else {
-		if( s ) free(s); s = 0;
+		free(s); 
 	}
 	return(0);
 }
@@ -400,7 +400,7 @@ void Append_Z_value( struct job *job, char *s )
 	if( t && *t ){
 		t = safestrdup3(t,",",s,__FILE__,__LINE__);
 		Set_str_value(&job->info,"Z",t);
-		if( t ) free(t); t = 0;
+		free(t); 
 	} else {
 		Set_str_value(&job->info,"Z",s);
 	}
@@ -574,9 +574,9 @@ int Set_job_ticket_from_cf_info( struct job *job, char *cf_file_image, int read_
 
  done:
 
-	if( datafile ) Free_line_list( datafile );
-	if( datafile ) free(datafile); datafile=0;
-	if( names )	free(names); names=0;
+	Free_line_list( datafile );
+	free(datafile); 
+	free(names); 
 	Free_line_list( &cf_line_list );
 	if(DEBUGL4)Dump_job("Set_job_ticket_from_cf_info - final",job);
 	return(returnstatus);
@@ -629,8 +629,8 @@ void Set_job_ticket_datafile_info( struct job *job )
 	}
 	Set_str_value(&job->info,HFDATAFILES,dataline);
 	Set_str_value(&job->info,DATAFILES,datafiles);
-	if( dataline ) free(dataline); dataline = 0;
-	if( datafiles ) free(datafiles); datafiles = 0;
+	free(dataline);
+	free(datafiles);
 }
 
 
@@ -710,12 +710,12 @@ int Set_job_ticket_file( struct job *job, struct line_list *perm_check, int open
 			u = Join_line_list( perm_check, "\n" );
 			t = Escape(u,1);
 			outstr = safeextend5(outstr,"\n",LPC,"=",u,__FILE__,__LINE__);
-			if(u) free(u); u = 0;
-			if(t) free(t); t = 0;
+			free(u); u = NULL;
+			free(t); t = NULL;
 		}
 		send_to_logger(-1, -1, job,UPDATE,outstr);
 	}
-	if( outstr ) free( outstr ); outstr = 0;
+        free( outstr ); 
 	return( status );
 }
 
@@ -831,15 +831,15 @@ void Set_spool_control( struct line_list *perm_check, const char *file,
 		/* log the spool control file changes */
 		t = Escape(s,1);
 		Set_str_value(&l,QUEUE,t);
-		if(s) free(s); s = 0;
-		if(t) free(t); t = 0;
+		free(s); s = NULL;
+		free(t); t = NULL;
 
 		if( perm_check ){
 			s = Join_line_list( perm_check, "\n" );
 			t = Escape(s,1);
 			Set_str_value(&l,LPC,t);
-			if(s) free(s); s = 0;
-			if(t) free(t); t = 0;
+			free(s); s = NULL;
+			free(t); t = NULL;
 		}
 		t = Join_line_list( &l, "\n");
 
@@ -847,8 +847,8 @@ void Set_spool_control( struct line_list *perm_check, const char *file,
 	}
 
 	Free_line_list(&l);
-	if(s) free(s); s = 0;
-	if(t) free(t); t = 0;
+	free(s);
+	free(t); 
 }
 
 void intval( const char *key, struct line_list *list, struct job *job )
@@ -1414,7 +1414,7 @@ char *Make_identifier( struct job *job )
 		id = safestrdup5(user,"@",host,"+",number,__FILE__,__LINE__);
 		if( s ) *s = '.';
 		Set_str_value(&job->info,IDENTIFIER,id);
-		if( id ) free(id); id = 0;
+		free(id); id = NULL;
 		s = Find_str_value(&job->info,IDENTIFIER);
 	}
 	return(s);
@@ -1624,7 +1624,7 @@ int Get_destination( struct job *job, int n )
 		s = safestrdup(s,__FILE__,__LINE__);
 		Unescape(s);
 		Split(&job->destination,s,Line_ends,1,Option_value_sep,1,1,1,0);
-		if(s) free( s ); s = 0;
+		free( s ); 
 		result = 0;
 	}
 	return( result );
@@ -1646,7 +1646,7 @@ int Get_destination_by_name( struct job *job, char *name )
 		s = safestrdup(s,__FILE__,__LINE__);
 		Unescape(s);
 		Split(&job->destination,s,Line_ends,1,Option_value_sep,1,1,1,0);
-		if(s) free( s ); s = 0;
+		free( s ); s = NULL;
 		result = 0;
 	}
 	return( result );
@@ -1768,7 +1768,7 @@ char *Fix_datafile_infox( struct job *job, const char *number, const char *suffi
 			s = safestrdup3(prefix,number,suffix,__FILE__,__LINE__);
 			if( transfername ) Set_casekey_str_value(&outfiles,transfername,s);
 			Set_str_value(lp,NTRANSFERNAME,s);
-			if(s) free(s); s = 0;
+			free(s); s = NULL;
 		} else {
 			Set_str_value(lp,NTRANSFERNAME,s);
 		}
@@ -1972,7 +1972,7 @@ void Fix_control( struct job *job, char *filter, char *xlate_format,
 	/* fix control file name */
 	s = safestrdup4("cf",pr,number,file_hostname,__FILE__,__LINE__);
 	Set_str_value(&job->info,XXCFTRANSFERNAME,s);
-	if(s) free(s); s = 0;
+	free(s); 
 	if(t) *t = '.';
 
 	/* fix control file contents */
@@ -1989,7 +1989,7 @@ void Fix_control( struct job *job, char *filter, char *xlate_format,
 			plp_snprintf(buffer,sizeof(buffer), "C%d",n+1);
 			s = safestrdup2(s,buffer,__FILE__,__LINE__);
 			Set_str_value(&controlfile,IDENTIFIER,s);
-			if(s) free(s); s = 0;
+			free(s); s = NULL;
 		} else {
 			Set_str_value(&controlfile,IDENTIFIER,s);
 		}
@@ -2078,8 +2078,8 @@ void Fix_control( struct job *job, char *filter, char *xlate_format,
 		DEBUG3( "Fix_control: data info '%s'", datalines );
 		temp = safeextend2(temp,datalines,__FILE__,__LINE__);
 		Set_str_value(&job->info,CF_OUT_IMAGE,temp);
-		if( temp ) free(temp); temp = 0;
-		if( datalines ) free(datalines); datalines = 0;
+		free(temp); temp = NULL;
+		free(datalines); datalines = NULL;
 	}
 	
 	if( filter ){
@@ -2115,9 +2115,11 @@ void Fix_control( struct job *job, char *filter, char *xlate_format,
 		}
 		DEBUG4("Fix_control: control filter output '%s'", s);
 		Set_str_value(&job->info,CF_OUT_IMAGE,s);
-		if(s) free(s); s = 0;
-		if( f_name ) unlink(f_name); f_name = 0;
-		if( c_name ) unlink(c_name); c_name = 0;
+		free(s); s = 0;
+		if( f_name ) unlink(f_name);
+		f_name = NULL;
+		if( c_name ) unlink(c_name);
+		c_name = NULL;
 		close( tempfc ); tempfc = -1;
 		close( tempfd ); tempfd = -1;
 	}

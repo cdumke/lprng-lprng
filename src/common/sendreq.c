@@ -152,7 +152,7 @@ int Send_request(
 	DEBUG1("Send_request: socket %d, real host '%s'", sock, real_host );
 	save_host = safestrdup(RemoteHost_DYN,__FILE__,__LINE__);
 	Set_DYN(&RemoteHost_DYN, real_host );
-	if( real_host ) free( real_host ); real_host = 0;
+	free( real_host ); real_host = NULL;
 
 	if( security && security->client_connect ){
 		DEBUG1("Send_request: security '%s', using connect", security->name ); 
@@ -190,7 +190,7 @@ int Send_request(
 		Set_DYN(&RemoteHost_DYN,save_host);
 		free(save_host); save_host = 0;
 	}
-	if( cmd ) free(cmd); cmd = 0;
+	free(cmd); cmd = NULL;
 	Free_line_list(&info);
 	return( sock );
 }

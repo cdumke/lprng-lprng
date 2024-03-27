@@ -232,7 +232,8 @@ int Send_job( struct job *job, struct job *logjob,
 			if( len ) setstatus(logjob, "error msg: '%s'", msg );
 		}
 	}
-	if( sock >= 0 ) close(sock); sock = -1;
+	if( sock >= 0 ) close(sock);
+	sock = -1;
 	if( save_host ){
 		Set_DYN(&RemoteHost_DYN,save_host);
 		free(save_host); save_host = 0;
