@@ -462,7 +462,7 @@ _("printer %s unknown state. enabled since %s. available\n"),
 		}
 		DEBUG2("Read_status_info: at end index_list %d, count %d", index_list, l.count );
 		for( i = 0; i < l.count && i < index_list; ++i ){
-			if( l.list[i] ) free( l.list[i] ); l.list[i] = 0;
+			free( l.list[i] ); l.list[i] = NULL;
 		}
 		for( i = 0; index_list < l.count ; ++i, ++index_list ){
 			l.list[i] = l.list[index_list];
