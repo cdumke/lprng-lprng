@@ -318,10 +318,10 @@ void Init_line_list( struct line_list *l )
 void Free_line_list( struct line_list *l )
 {
 	int i;
-	if( l == 0 ) return;
+	if( l == NULL ) return;
 	if( l->list ){
 		for( i = 0; i < l->count; ++i ){
-			if( l->list[i] ) free( l->list[i]); l->list[i] = 0;
+			 free( l->list[i]); 
 		}
 		free(l->list);
 	}
@@ -946,7 +946,7 @@ void Set_str_value( struct line_list *l, const char *key, const char *value )
 	if( value && *value ){
 		s = safestrdup3(key,"=",value,__FILE__,__LINE__);
 		Add_line_list(l,s,Hash_value_sep,1,1);
-		if(s) free(s); s = 0;
+		free(s); s = NULL;
 	} else if( !Find_first_key(l, key, Hash_value_sep, &mid ) ){
 		Remove_line_list(l,mid);
 	}
@@ -972,7 +972,7 @@ void Set_casekey_str_value( struct line_list *l, const char *key, const char *va
 	if( value && *value ){
 		s = safestrdup3(key,"=",value,__FILE__,__LINE__);
 		Add_casekey_line_list(l,s,Hash_value_sep);
-		if(s) free(s); s = 0;
+		free(s); s = NULL;
 	} else if( !Find_first_casekey(l, key, Hash_value_sep, &mid ) ){
 		Remove_line_list(l,mid);
 	}
@@ -1935,7 +1935,7 @@ void Expand_percent( char **var )
 			len = safestrlen(str) + safestrlen(t);
 			u = str;
 			str = safestrdup3(str,t,s,__FILE__,__LINE__);
-			if(u) free(u); u = 0;
+			free(u); u = NULL;
 			s = str+len;
 		} else {
 			++s;
@@ -1979,7 +1979,7 @@ void Expand_hash_values( struct line_list *hash )
 		if( safestrchr( s, '%' ) ){
 			u = safestrdup(s,__FILE__,__LINE__);
 			Expand_percent( &u );
-			if( s ) free(s); s = 0;
+			free(s); s = NULL;
 			hash->list[i] = u;
 		}
 	}
@@ -1994,7 +1994,7 @@ char *Set_DYN( char **v, const char *s )
 	char *t = *v;
 	*v = 0;
 	if( s && *s ) *v = safestrdup(s,__FILE__,__LINE__);
-	if( t ) free(t);
+	free(t);
 	return( *v );
 }
 
@@ -3105,7 +3105,7 @@ void Fix_dollars( struct line_list *l, struct job *job, int nosplit, const char 
 					position = safestrlen(strv);
 					l->list[count] = strv
 						 = safeextend3(strv,flags,rest,__FILE__,__LINE__);
-					if( rest ) free(rest); rest = 0;
+					free(rest); rest = NULL;
 				}
 				continue;
 			} else if( c == '{' ){
@@ -3229,7 +3229,7 @@ void Fix_dollars( struct line_list *l, struct job *job, int nosplit, const char 
 					l->list[count] = strv
 						 = safeextend4(strv,str,tag,rest,__FILE__,__LINE__);
 				}
-				if( rest ) free(rest); rest = 0;
+				free(rest); rest = NULL;
 			} else {
 				memmove(strv+position,rest,safestrlen(rest)+1);
 			}
