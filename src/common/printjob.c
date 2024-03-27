@@ -291,7 +291,8 @@ int Print_job( int output, int status_device, struct job *job,
 		plp_snprintf(filter_title,sizeof(filter_title), "%s filter '%s'",
 			filter_name, msg );
 
-		if( fd >= 0 ) close(fd); fd = -1;
+		if( fd >= 0 ) close(fd);
+		fd = -1;
 		if( !Is_server && openname == 0 ){
 			fd = 0;
 			DEBUG3("Print_job: taking file from STDIN" );
@@ -453,9 +454,9 @@ int Print_job( int output, int status_device, struct job *job,
 					n = Wait_for_pid( pid, filter_title, 0, time_left );
 					switch(n){
 						case JSUCC: break;
-						case JTIMEOUT:
+					        case  JTIMEOUT:
 							/* get the timeout value */
-							if( send_job_rw_timeout > 0
+							if ( send_job_rw_timeout > 0
 								&& Status_file_DYN
 								&& !stat(Status_file_DYN, &statb) ){
 								int delta = time(0) - statb.st_mtime;
@@ -465,6 +466,7 @@ int Print_job( int output, int status_device, struct job *job,
 									continue;
 								}
 							}
+							/* FALLTHRU */
 						default:
 							Errorcode = n;
 							setstatus(job, "%s filter exit status '%s'",
@@ -563,14 +565,18 @@ int Print_job( int output, int status_device, struct job *job,
 
  exit:
 	Init_buf(&Outbuf, &Outmax, &Outlen );
-	if( Outbuf ) free(Outbuf); Outbuf = 0;
-	if(FF_str) free(FF_str);
-	if(leader_str) free(leader_str);
-	if(trailer_str) free(trailer_str);
-	if( of_stdin != -1 ) close(of_stdin); of_stdin = -1;
-	if( of_stderr != -1 ) close(of_stderr); of_stderr = -1;
-	if( tempfd != -1 ) close(tempfd); tempfd = -1;
-	if( fd != -1 ) close(fd); fd = -1;
+	free(Outbuf); Outbuf = NULL;
+	free(FF_str);
+	free(leader_str);
+	free(trailer_str);
+	if( of_stdin != -1 ) close(of_stdin);
+	of_stdin = -1;
+	if( of_stderr != -1 ) close(of_stderr);
+	of_stderr = -1;
+	if( tempfd != -1 ) close(tempfd);
+	tempfd = -1;
+	if( fd != -1 ) close(fd);
+	fd = -1;
 	if(DEBUGL3){
 		LOGDEBUG("Print_job: at end open fd's");
 		for( i = 0; i < 20; ++i ){
@@ -823,7 +829,7 @@ static void Print_banner( const char *name, char *pgm, struct job *job )
 		bl = safestrdup2(l.list[0],"\n",__FILE__,__LINE__);
 		Put_buf_str( bl, &Outbuf, &Outmax, &Outlen );
 		Free_line_list(&l);
-		if( bl ) free(bl); bl = 0;
+		free(bl); bl = NULL;
 	}
 	if(DEBUGL3){
 		struct stat statb; int i;
