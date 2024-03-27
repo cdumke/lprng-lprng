@@ -215,7 +215,7 @@ int Receive_job( int *sock, char *input )
 			logerr_die(LOG_ERR, _("Receive_job: cannot lock lockfile '%s'"),
 				path ); 
 		}
-		if(path) free(path); path = 0;
+		free(path); path = NULL;
 	}
 
 	while( status == 0 ){
@@ -471,8 +471,11 @@ int Receive_job( int *sock, char *input )
 
  error:
 
-	if( temp_fd > 0 ) close(temp_fd); temp_fd = -1;
-	if( fifo_fd > 0 ) close(fifo_fd); fifo_fd = -1;
+	if( temp_fd > 0 ) close(temp_fd);
+	temp_fd = -1;
+
+	if( fifo_fd > 0 ) close(fifo_fd);
+	fifo_fd = -1;
 
 	Remove_tempfiles();
 	if( error[0] ){
@@ -940,8 +943,11 @@ int Scan_block_file( int fd, char *error, int errlen, struct line_list *header_i
 		Remove_tempfiles();
 		Remove_job( &job );
 	}
-	if( job_ticket_fd > 0 ) close(job_ticket_fd); job_ticket_fd = -1;
-	if( tempfd > 0 ) close(tempfd); tempfd = -1;
+	if( job_ticket_fd > 0 )  close(job_ticket_fd);
+	job_ticket_fd = -1;
+	if( tempfd > 0 ) close(tempfd);
+	tempfd = -1;
+	
 	Free_line_list(&l);
 	Free_line_list(&info);
 	Free_line_list(&files);
@@ -1194,7 +1200,7 @@ int Check_for_missing_files( struct job *job, struct line_list *files,
 			&& (t = safestrchr(FQDNRemote_FQDN,'.')) ){
 			s = safestrdup2(fromhost, t, __FILE__,__LINE__ );
 			Set_str_value(&job->info,FROMHOST,s);
-			if( s ) free(s); s = 0;
+			free(s); 
 			fromhost = Find_str_value(&job->info,FROMHOST);
 		}
 	}
@@ -1226,7 +1232,7 @@ int Check_for_missing_files( struct job *job, struct line_list *files,
 	if( isdigit(cval(file_hostname)) ){
 		char * s = safestrdup2("ADDR",file_hostname,__FILE__,__LINE__);
 		Set_str_value(&job->info,FILE_HOSTNAME,s);
-		if( s ) free(s); s = 0;
+		free(s); s = NULL;
 	} else {
 		Set_str_value(&job->info,FILE_HOSTNAME,file_hostname);
 	}
@@ -1726,7 +1732,7 @@ static void Generate_control_file( struct job *job )
 {
 	/* generate the control file */
 	int i;
-	char *cf = 0;
+	char *cf = NULL;
 	char *openname, *transfername, *datafiles;
 	struct line_list dups, *lp;
 
@@ -1777,10 +1783,10 @@ static void Generate_control_file( struct job *job )
 
 	DEBUGF(DRECV1)("Generate_control_file: datafiles '%s'", datafiles );
 	Set_str_value(&job->info,DATAFILES,datafiles);
-	if( datafiles ) free(datafiles); datafiles = 0;
+	free(datafiles); datafiles = NULL;
 
 	DEBUGF(DRECV1)("Generate_control_file: cf start '%s'", cf );
 	Set_str_value(&job->info,CF_OUT_IMAGE,cf);
 	Free_line_list( &dups );
-	if( cf ) free(cf); cf = 0;
+	free(cf); 
 }
