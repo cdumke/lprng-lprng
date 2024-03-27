@@ -113,13 +113,15 @@ void Sendmail_to_user( int retval, struct job *job )
 	/*
 	 * get the last status of the spooler
 	 */
-	if( (s = Get_file_image( Queue_status_file_DYN, Max_status_size_DYN )) ){
+	s = Get_file_image( Queue_status_file_DYN, Max_status_size_DYN ) ;
+	if(  s ){
 		if( Write_fd_str( tempfd, "\nStatus:\n\n" ) < 0 ||
 			Write_fd_str( tempfd, s ) < 0 ) goto wr_error;
 		free(s); s = NULL;
 	}
 
-	if( (s = Get_file_image( Status_file_DYN, Max_status_size_DYN )) ){
+        s = Get_file_image( Status_file_DYN, Max_status_size_DYN );
+	if( s ){
 		if( Write_fd_str( tempfd, "\nFilter Status:\n\n" ) < 0 ||
 			Write_fd_str( tempfd, s ) < 0 ) goto wr_error;
 		free(s); s = NULL;
