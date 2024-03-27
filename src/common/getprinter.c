@@ -355,7 +355,7 @@ void Get_all_printcap_entries(void)
 	/*
 	 * now check to see if we have an entry for the 'all:' printcap
 	 */
-	s = t = 0;
+	s = t = NULL;
 	DEBUG1("Get_all_printcap_entries: starting");
 	Free_line_list( &All_line_list );
 	if( (s = Select_pc_info(ALL,
@@ -396,7 +396,7 @@ void Show_formatted_info( void )
 	if(DEBUGL1)Dump_line_list("Aliases",&PC_alias_line_list);
 	s = Join_line_list_with_sep(&PC_alias_line_list,"|");
 	if( Write_fd_str( 1, s ) < 0 ) cleanup(0);
-	if(s) free(s); s = 0;
+	free(s); 
 	/* Escape_colons( &PC_entry_line_list ); */
 	s = Join_line_list_with_sep(&PC_entry_line_list,"\n :");
 	Expand_percent( &s );
@@ -404,7 +404,7 @@ void Show_formatted_info( void )
 		if( Write_fd_str( 1, "\n :" ) < 0 ) cleanup(0);
 		if( Write_fd_str( 1, s ) < 0 ) cleanup(0);
 	}
-	if( s ) free(s); s =0;
+	free(s); s =NULL;
 	if( Write_fd_str( 1, "\n" ) < 0 ) cleanup(0);
 }
 
@@ -422,7 +422,7 @@ void Show_all_printcap_entries( void )
 		if( Write_fd_str( 1, s ) < 0 ) cleanup(0);
 		if( Write_fd_str( 1, "\n" ) < 0 ) cleanup(0);
 	}
-	if(s) free(s); s = 0;
+	free(s); 
 
 	s = Join_line_list_with_sep(&All_line_list,"\n :");
 	if( Write_fd_str( 1, "\n.all\n" ) < 0 ) cleanup(0);
@@ -431,7 +431,7 @@ void Show_all_printcap_entries( void )
 		if( Write_fd_str( 1, s ) < 0 ) cleanup(0);
 		if( Write_fd_str( 1, "\n" ) < 0 ) cleanup(0);
 	}
-	if( s ) free(s); s =0;
+	free(s); s =NULL;
 
 	if( Write_fd_str( 1,"\n#Printcap Information\n") < 0 ) cleanup(0);
 	for( i = 0; i < All_line_list.count; ++i ){
