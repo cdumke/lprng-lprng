@@ -2963,9 +2963,9 @@ void Fix_Z_opts( struct job *job )
 			start= safestrdup3(str,(start?",":""),start,
 				__FILE__,__LINE__);
 			Set_str_value(&job->info, buffer, start );
-			if( start ) free(start); start = 0;
+			free(start); start = NULL;
 		}
-		if( str ) free(str); str = 0;
+		free(str); str = NULL;
 	}
 	str = Find_str_value( &job->info,"Z" );
 	DEBUG4("Fix_Z_opts: after Prefix_option_to_option '%s'", str );
@@ -3005,14 +3005,14 @@ void Fix_Z_opts( struct job *job )
 		s = safestrdup3(str,",",Append_Z_DYN,__FILE__,__LINE__);
 		Set_str_value(&job->info,"Z",s);
 		str = Find_str_value(&job->info,"Z");
-		if(s) free(s); s = 0;
+		free(s); s = NULL;
 	}
 	DEBUG4("Fix_Z_opts: after append '%s'", str );
 	if( Prefix_Z_DYN && *Prefix_Z_DYN ){
 		s = safestrdup3(Prefix_Z_DYN,",",str,__FILE__,__LINE__);
 		Set_str_value(&job->info,"Z",s);
 		str = Find_str_value(&job->info,"Z");
-		if(s) free(s); s = 0;
+		free(s); s = NULL;
 	}
 	DEBUG4("Fix_Z_opts: after Prefix_Z '%s'", str );
 	for( s = safestrchr(str,','); s; s = strchr(s,',') ){
