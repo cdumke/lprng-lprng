@@ -41,8 +41,8 @@ static void Clear_host_information( struct host_information *info )
 {
 	Free_line_list( &info->host_names );
 	Free_line_list( &info->h_addr_list );
-	if( info->shorthost ) free(info->shorthost ); info->shorthost = 0;
-	if( info->fqdn ) free(info->fqdn ); info->fqdn = 0;
+	 free(info->shorthost ); info->shorthost = NULL;
+	free(info->fqdn ); info->fqdn = NULL;
 }
 
 void Clear_all_host_information(void)
@@ -634,8 +634,8 @@ int Match_ipaddr_value( struct line_list *list, struct host_information *host )
 		if( invert ) result = !result;
 	}
 	DEBUGF(DDB2)("Match_ipaddr_value: result %d", result );
-	if(addr) free(addr); addr = 0;
-	if(mask) free(mask); mask = 0;
+	free(addr);
+	free(mask);
 	if( result )
 		return 1;
 	else
